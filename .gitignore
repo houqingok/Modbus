@@ -1,2 +1,4 @@
-/modbus_master/
-# This is to untrack unwanted files
+#Use this file to set what files 
+#To untrack
+/modbus_master/Release
+/modbus_master/Debug

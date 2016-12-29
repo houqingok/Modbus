@@ -37,6 +37,7 @@
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_16.9.compilerID.DEBUGGING_MODEL.2119453760" name="Debugging model" superClass="com.ti.ccstudio.buildDefinitions.C2000_16.9.compilerID.DEBUGGING_MODEL" value="com.ti.ccstudio.buildDefinitions.C2000_16.9.compilerID.DEBUGGING_MODEL.SYMDEBUG__DWARF" valueType="enumerated"/>
 								<option id="com.ti.ccstudio.buildDefinitions.C2000_16.9.compilerID.INCLUDE_PATH.654386743" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.C2000_16.9.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;E:\ccs_git_source_control\modbus_master\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;E:\ccs_git_source_control\modbus_master\dof6\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\ti\controlSUITE\device_support\f2833x\v142\DSP2833x_headers\include&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;D:\ti\controlSUITE\device_support\f2833x\v142\DSP2833x_common\include&quot;"/>

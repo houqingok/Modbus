@@ -1,6 +1,6 @@
 #include "calc_rod_length.h"
 #include "DataTypes.h"
-#include "rtwtypes.h"
+#include <math.h>
 
 
 

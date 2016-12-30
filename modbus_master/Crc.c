@@ -1,6 +1,6 @@
 #include  "Crc.h"
 
-unsigned int generateCrc(unsigned int * buf, int len, bool swap)
+unsigned int generateCrc(unsigned int *buf, int len, bool swap)
 {
 	unsigned int crc = 0xFFFF;
 	unsigned int temp = 0;

@@ -1,18 +1,26 @@
+#include "lookup_table.h"
 #include "ModbusMaster.h"
 #include "DSP2833x_GlobalPrototypes.h"
 #include "DSP2833x_Device.h"
 #include "DSP2833x_Examples.h"
-#include<math.h>
-#include"lookup_table.h"
-float32 sine_ref[500]={0};
-int i=0;
-
+#include "calc_rod_length.h"
 
 __interrupt void cpu_timer1_isr(void);
+ float32 test_sine_ref[500]={0};
+ float32 real_sine_ref=0;
+ float32 rod_attach_P[18]={0};
+ float32 servo_attach_B[18]={0};
+ float32 length[6];            //this is the data to send to slave
+
+int i=0;
+int if_ref_updated=0;
 ModbusMaster mb;
 
-int main(){
+void main()
+{
 
+//   float32 trans[3]={0};  //
+//   float32 orient[3]={0}; //
 
 	InitSysCtrl();
 	DINT;
@@ -61,9 +69,10 @@ int main(){
 	// Configure CPU-Timer 0, 1, and 2 to interrupt every second:
 	// 100MHz CPU Freq, 1 second Period (in uSeconds)
 
-	   //ConfigCpuTimer(&CpuTimer0, 100, 1000000);
-	   ConfigCpuTimer(&CpuTimer1, 100, 2000);
-	   //ConfigCpuTimer(&CpuTimer2, 100, 1000000);
+
+	   //ConfigCpuTimer(&CpuTimer1, 100, 2000);// 500 points, 2000us between two points, period 1s, f 1Hz
+	   ConfigCpuTimer(&CpuTimer1, 100, 4000);  // period 2s, f 0.5Hz
+
 	#endif
 	// To ensure precise timing, use write-only instructions to write to the entire register. Therefore, if any
 	// of the configuration bits are changed in ConfigCpuTimer and InitCpuTimers (in DSP2833x_CpuTimers.h), the
@@ -128,10 +137,16 @@ int main(){
 	mb.requester.addr	      = 1;                        //starting address
 	mb.requester.totalData    = 9;                           //how many registers we wish to read
 	mb.requester.generate(&mb);
-	while(1) {
+	while(1)
+	{
 		//calculate six leg length, put them in holding registers and write slave registers.
+        if(if_ref_updated==1)
+        {
+            if_ref_updated=0;
+            //calc_rod_length(trans,orient);
+        }
 
-		mb.requester.generate(&mb);
+	    mb.requester.generate(&mb);
 		mb.loopStates(&mb);
 
 	}
@@ -142,9 +157,13 @@ __interrupt void cpu_timer1_isr(void)
 {
    CpuTimer1.InterruptCount++;
    i++;
-   sine_ref[i] = sine_table[i];
+   test_sine_ref[i] = (float)(sine_table[i])/4096;// use float without () throws error, expected an expression
+   real_sine_ref =(float)(sine_table[i])/4096;
    if(i==499)
-       i=0;
+       {
+           i=0;
+       }
+   if_ref_updated =1;
 
    // The CPU acknowledges the interrupt.
    EDIS;

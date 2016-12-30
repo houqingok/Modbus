@@ -1,13 +1,12 @@
 #include "calc_rod_length.h"
-#include "DataTypes.h"
-#include <math.h>
 
+extern float32 rod_attach_P[18];
+extern float32 servo_attach_B[18];
+extern float32 length[6];
 
-
-void calc_rod_length(float32 trans[3], float32 orient[3],float32 rod_attach_P[18],float32 servo_attach_B[18])
+void calc_rod_length(float32 trans[3],float32 orient[3])
 {
 // define four translational matrix
-    float32 length[6];
 	float32 leg_vector[18];
     float32 rot_matrix[9];
     // calculate translation matrix
@@ -15,17 +14,17 @@ void calc_rod_length(float32 trans[3], float32 orient[3],float32 rod_attach_P[18
 	float b = orient[1];
 	float c = orient[2];
 
-	rot_matrix[0]= cos(c)*cos(b);
-	rot_matrix[3]= sin(c)*cos(b);
-	rot_matrix[6]=-sin(b);
+	rot_matrix[0]= m_cos(c)*m_cos(b);
+	rot_matrix[3]= m_sin(c)*m_cos(b);
+	rot_matrix[6]=-m_sin(b);
 
-	rot_matrix[1]=-sin(c)*cos(a)+cos(c)*sin(b)*sin(a);
-	rot_matrix[4]= cos(c)*cos(a)+sin(c)*sin(b)*sin(a);
-	rot_matrix[7]= cos(b)*sin(a);
+	rot_matrix[1]=-m_sin(c)*m_cos(a)+m_cos(c)*m_sin(b)*m_sin(a);
+	rot_matrix[4]= m_cos(c)*m_cos(a)+m_sin(c)*m_sin(b)*m_sin(a);
+	rot_matrix[7]= m_cos(b)*m_sin(a);
 
-	rot_matrix[2]= sin(c)*sin(a)+cos(c)*sin(b)*cos(a);
-	rot_matrix[5]=-cos(c)*sin(a)+sin(c)*sin(b)*cos(a);
-	rot_matrix[8]= cos(b)*cos(a);
+	rot_matrix[2]= m_sin(c)*m_sin(a)+m_cos(c)*m_sin(b)*m_cos(a);
+	rot_matrix[5]=-m_cos(c)*m_sin(a)+m_sin(c)*m_sin(b)*m_cos(a);
+	rot_matrix[8]= m_cos(b)*m_cos(a);
 
 // calculate coordinates qi of anchor points pi with respect to the base reference frame
 	int i,j,k;

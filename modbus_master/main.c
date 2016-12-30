@@ -4,7 +4,7 @@
 #include "DSP2833x_Examples.h"
 #include<math.h>
 #include"lookup_table.h"
-float32 sine_ref=0;
+float32 sine_ref[500]={0};
 int i=0;
 
 
@@ -62,7 +62,7 @@ int main(){
 	// 100MHz CPU Freq, 1 second Period (in uSeconds)
 
 	   //ConfigCpuTimer(&CpuTimer0, 100, 1000000);
-	   ConfigCpuTimer(&CpuTimer1, 100, 1000000);
+	   ConfigCpuTimer(&CpuTimer1, 100, 2000);
 	   //ConfigCpuTimer(&CpuTimer2, 100, 1000000);
 	#endif
 	// To ensure precise timing, use write-only instructions to write to the entire register. Therefore, if any
@@ -142,7 +142,7 @@ __interrupt void cpu_timer1_isr(void)
 {
    CpuTimer1.InterruptCount++;
    i++;
-   sine_ref = sine_table[i];
+   sine_ref[i] = sine_table[i];
    if(i==499)
        i=0;
 

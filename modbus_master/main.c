@@ -7,11 +7,13 @@
 float32 sine_ref=0;
 int i=0;
 
+
 __interrupt void cpu_timer1_isr(void);
+ModbusMaster mb;
 
 int main(){
 
-    ModbusMaster mb;
+
 	InitSysCtrl();
 	DINT;
 
@@ -60,7 +62,7 @@ int main(){
 	// 100MHz CPU Freq, 1 second Period (in uSeconds)
 
 	   //ConfigCpuTimer(&CpuTimer0, 100, 1000000);
-	   ConfigCpuTimer(&CpuTimer1, 100, 2000);
+	   ConfigCpuTimer(&CpuTimer1, 100, 1000000);
 	   //ConfigCpuTimer(&CpuTimer2, 100, 1000000);
 	#endif
 	// To ensure precise timing, use write-only instructions to write to the entire register. Therefore, if any
@@ -82,7 +84,9 @@ int main(){
 	// which is connected to CPU-Timer 1, and CPU int14, which is connected
 	// to CPU-Timer 2:
 	   //IER |= M_INT1;
-	   IER |= M_INT13;
+
+	   IER |= M_INT13;// this is timer 1 interrupt
+
 	   //IER |= M_INT14;
 
 	// Enable TINT0 in the PIE: Group 1 interrupt 7
@@ -126,6 +130,7 @@ int main(){
 	mb.requester.generate(&mb);
 	while(1) {
 		//calculate six leg length, put them in holding registers and write slave registers.
+
 		mb.requester.generate(&mb);
 		mb.loopStates(&mb);
 
@@ -136,9 +141,9 @@ int main(){
 __interrupt void cpu_timer1_isr(void)
 {
    CpuTimer1.InterruptCount++;
-   i+=8;
+   i++;
    sine_ref = sine_table[i];
-   if(i==3992)
+   if(i==499)
        i=0;
 
    // The CPU acknowledges the interrupt.
